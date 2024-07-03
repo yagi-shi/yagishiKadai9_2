@@ -8,43 +8,37 @@
 import SwiftUI
 
 struct ModalView: View {
-    
-    //.presentationModeにてModalがtrueとなっている情報を取得し変数に格納
+
+    // .presentationModeにてModalがtrueとなっている情報を取得し変数に格納
     @Environment(\.presentationMode) var presentationMode
-    @Binding var selectedPrefecture : String
-    
+    @Binding var selectedPrefecture: String?
+
+    let prefectures: [String] = [
+        "東京都",
+        "神奈川県",
+        "埼玉県",
+        "千葉県"
+    ]
+
     var body: some View {
-        
-        NavigationStack{
+        NavigationStack {
             VStack(spacing: 50) {
-                Button("東京都"){
-                    selectedPrefecture = "東京都"
-                    presentationMode.wrappedValue.dismiss()
-                    print("test")
-                }
-                Button("神奈川県"){
-                    selectedPrefecture = "神奈川県"
-                    presentationMode.wrappedValue.dismiss()
-                }
-                Button("埼玉県"){
-                    selectedPrefecture = "埼玉県"
-                    presentationMode.wrappedValue.dismiss()
-                }
-                Button("千葉県"){
-                    selectedPrefecture = "千葉県"
-                    presentationMode.wrappedValue.dismiss()
+                ForEach(prefectures, id: \.self) { prefecture in
+                    Button(prefecture) {
+                        selectedPrefecture = prefecture
+                        presentationMode.wrappedValue.dismiss()
+                    }
                 }
             }
             .toolbarBackground(.visible, for: .navigationBar)
-            .navigationBarItems(leading: Button("Cancel"){
-                //dismissを用いて、true->falseに値を更新し、モーダルを閉じる
+            .navigationBarItems(leading: Button("Cancel") {
+                // dismissを用いて、true->falseに値を更新し、モーダルを閉じる
                 presentationMode.wrappedValue.dismiss()
             })
-            
         }
     }
 }
 
-//#Preview {
-//    ModalView()
-//}
+ #Preview {
+     ModalView(selectedPrefecture: Binding<String?>.constant(nil))
+ }
